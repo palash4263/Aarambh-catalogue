@@ -66,7 +66,9 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <span className="block font-semibold">Email</span>
-                  <span className="break-all">support@utsavdecor.com</span>
+                  <a href="mailto:monu.tani@gmail.com" className="break-all hover:text-[#E65D5D] transition-colors">
+                    monu.tani@gmail.com
+                  </a>
                 </div>
               </div>
 
