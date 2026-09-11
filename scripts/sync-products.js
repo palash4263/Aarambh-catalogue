@@ -23,8 +23,9 @@ require.extensions['.ts'] = (m, f) =>
 const { mockProducts } = require(path.join(ROOT, 'src/data/products.ts'));
 
 const { createClient } = require(path.join(ROOT, 'node_modules/@supabase/supabase-js'));
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, key);
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const url = process.env.NEXT_SUPABASE_URL || process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabase = createClient(url, key);
 
 const rows = mockProducts.map((p) => ({
   id: p.id,
