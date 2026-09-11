@@ -44,12 +44,39 @@ const rows = mockProducts.map((p) => ({
   festival_rank: p.festivalRank ?? null,
 }));
 
+// Supabase is the source of truth for anything edited day-to-day in the table
+// editor. These columns are written only when a product is first created, so
+// re-running the sync never resets a price change made in the dashboard.
+// Pass --force-prices to push local values over the live ones deliberately.
+const LIVE_OWNED = ['price', 'original_price', 'in_stock'];
+const forcePrices = process.argv.includes('--force-prices');
+
 (async () => {
-  console.log(`Using ${process.env.SUPABASE_SERVICE_ROLE_KEY ? 'service-role' : 'anon'} key, upserting ${rows.length} rows…`);
-  const { error } = await supabase.from('products').upsert(rows, { onConflict: 'id' });
-  if (error) {
-    console.error('UPSERT FAILED:', error.code, error.message);
-    process.exit(1);
+  const keyKind = process.env.SUPABASE_SERVICE_ROLE_KEY ? 'service-role' : 'anon';
+  const { data: existing, error: e0 } = await supabase.from('products').select('id');
+  if (e0) { console.error('read failed:', e0.message); process.exit(1); }
+  const existingIds = new Set(existing.map((r) => r.id));
+
+  const inserts = rows.filter((r) => !existingIds.has(r.id));
+  const updates = rows
+    .filter((r) => existingIds.has(r.id))
+    .map((r) => {
+      if (forcePrices) return r;
+      const copy = { ...r };
+      for (const col of LIVE_OWNED) delete copy[col];
+      return copy;
+    });
+
+  console.log(`Using ${keyKind} key: ${inserts.length} new, ${updates.length} existing (${forcePrices ? 'prices FORCED from local' : 'prices/stock left as set in Supabase'})…`);
+
+  if (inserts.length) {
+    const { error } = await supabase.from('products').insert(inserts);
+    if (error) { console.error('INSERT FAILED:', error.code, error.message); process.exit(1); }
+  }
+  for (const row of updates) {
+    const { id, ...fields } = row;
+    const { error } = await supabase.from('products').update(fields).eq('id', id);
+    if (error) { console.error(`UPDATE ${id} FAILED:`, error.code, error.message); process.exit(1); }
   }
   const { data, error: e2 } = await supabase
     .from('products')
