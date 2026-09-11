@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Product } from '@/types';
+import { Product, Festival } from '@/types';
 import ProductCard from './ProductCard';
+import { FESTIVALS } from '@/data/festivals';
 import { SlidersHorizontal, Sparkles } from 'lucide-react';
 
 interface ProductGridProps {
@@ -10,7 +11,10 @@ interface ProductGridProps {
   onAddToCart: (product: Product) => void;
   searchQuery: string;
   loading?: boolean;
+  festival?: Festival | null;
 }
+
+const DEFAULT_THEME = FESTIVALS.find((f) => f.slug === 'diwali')!.theme;
 
 // Display names for the category slugs used in the database.
 const CATEGORY_LABELS: Record<string, string> = {
@@ -20,14 +24,23 @@ const CATEGORY_LABELS: Record<string, string> = {
   'party-hampers': '🎁 Party & Gift Hampers',
 };
 
-export default function ProductGrid({ products, onAddToCart, searchQuery, loading = false }: ProductGridProps) {
+export default function ProductGrid({
+  products,
+  onAddToCart,
+  searchQuery,
+  loading = false,
+  festival = null,
+}: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'low-high' | 'high-low' | 'rating'>('featured');
+
+  const theme = festival?.theme ?? DEFAULT_THEME;
+  const isExclusive = festival?.mode === 'exclusive';
 
   // Build the filter pills from the categories actually present, so a pill can
   // never point at an empty category and no category is left unreachable.
   const categories = [
-    { id: 'all', label: 'All Products' },
+    { id: 'all', label: festival ? `All ${festival.name} Picks` : 'All Products' },
     ...Array.from(new Set(products.map((p) => p.category))).map((id) => ({
       id,
       label: CATEGORY_LABELS[id] || id.replace(/-/g, ' '),
@@ -58,13 +71,22 @@ export default function ProductGrid({ products, onAddToCart, searchQuery, loadin
 
         {/* Left: Collection Title */}
         <div>
-          <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-[#E65D5D] uppercase tracking-wider mb-1">
+          <div
+            className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-1"
+            style={{ color: theme.accentDark }}
+          >
             <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span>Handcrafted Collection</span>
+            <span>{festival ? theme.eyebrow : 'Handcrafted Collection'}</span>
           </div>
           <h2 className="text-xl sm:text-3xl font-extrabold text-stone-900 font-display">
-            Festive & House Decor
+            {festival ? theme.collectionTitle : 'Festive & House Decor'}
           </h2>
+          {isExclusive && (
+            <p className="text-xs sm:text-sm text-stone-500 mt-1.5">
+              Showing {festival!.name} essentials only — our full decor range is
+              back right after the festival.
+            </p>
+          )}
         </div>
 
         {/* Right: Item Count Header with Accent Underline (Matching Screenshot '37 total results') */}
@@ -73,7 +95,10 @@ export default function ProductGrid({ products, onAddToCart, searchQuery, loadin
             <span className="text-[#71717A] text-xs sm:text-sm font-medium">
               <strong className="text-stone-900 font-bold">{sortedProducts.length}</strong> total results
             </span>
-            <div className="absolute bottom-0 right-0 left-0 h-0.5 bg-[#E65D5D] rounded-full"></div>
+            <div
+              className="absolute bottom-0 right-0 left-0 h-0.5 rounded-full"
+              style={{ backgroundColor: theme.accent }}
+            ></div>
           </div>
 
           {/* Sort Dropdown */}
@@ -94,7 +119,10 @@ export default function ProductGrid({ products, onAddToCart, searchQuery, loadin
         </div>
       </div>
 
-      {/* Filter Category Pills — swipeable rail on phones, edge-to-edge like the reference */}
+      {/* Filter Category Pills — swipeable rail on phones, edge-to-edge like the
+          reference. Hidden during an exclusive festival: the whole shelf is the
+          festival collection, so splitting it by category only buries products. */}
+      {!isExclusive && (
       <div className="flex items-center gap-2 overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 pb-2">
         {categories.map((cat) => (
           <button
@@ -110,6 +138,7 @@ export default function ProductGrid({ products, onAddToCart, searchQuery, loadin
           </button>
         ))}
       </div>
+      )}
 
       {/* Grid of Product Cards */}
       {loading ? (
@@ -136,7 +165,8 @@ export default function ProductGrid({ products, onAddToCart, searchQuery, loadin
             onClick={() => {
               setSelectedCategory('all');
             }}
-            className="mt-3 text-xs font-bold text-[#E65D5D] hover:underline"
+            className="mt-3 text-xs font-bold hover:underline"
+            style={{ color: theme.accentDark }}
           >
             Reset Filters
           </button>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, isSupabaseConfigured } from '@/lib/supabaseClient';
 import { mockProducts } from '@/data/products';
+import { getActiveFestival, getFestivalBySlug, applyFestival } from '@/data/festivals';
 
 // Catalogue data must never be served from a build-time or Data Cache:
 // prices edited in Supabase have to appear on the next page load.
@@ -12,6 +13,15 @@ export async function GET(request: NextRequest) {
   const category = searchParams.get('category');
   const query = searchParams.get('q');
   const sort = searchParams.get('sort');
+  // Explicit slug, or 'none' to force the full year-round catalogue. Absent
+  // means "whatever the calendar says today", resolved below.
+  const festivalParam = searchParams.get('festival');
+  const festival =
+    festivalParam === 'none' || festivalParam === 'all'
+      ? null
+      : festivalParam
+      ? getFestivalBySlug(festivalParam)
+      : getActiveFestival();
 
   // 1. If Supabase is configured, fetch live from Supabase PostgreSQL Database
   if (isSupabaseConfigured && supabase) {
@@ -52,13 +62,21 @@ export async function GET(request: NextRequest) {
           inStock: p.in_stock,
           description: p.description,
           deliveryEstimate: p.delivery_estimate,
+          festivals: p.festivals ?? undefined,
+          festivalRank: p.festival_rank ?? undefined,
         }));
+
+        // Deliberately filtered in JS rather than SQL: if the festivals column
+        // hasn't been migrated yet, a .contains() would fail the whole query
+        // and silently drop the live catalogue to the offline fallback.
+        const festivalData = applyFestival(mappedData, festival);
 
         return NextResponse.json({
           success: true,
           source: 'Supabase PostgreSQL DB',
-          total: mappedData.length,
-          data: mappedData,
+          festival: festival?.slug ?? null,
+          total: festivalData.length,
+          data: festivalData,
         },
       { headers: { 'Cache-Control': 'no-store, max-age=0, must-revalidate' } }
     );
@@ -69,7 +87,7 @@ export async function GET(request: NextRequest) {
   }
 
   // 2. Fallback to local data layer
-  let filtered = [...mockProducts];
+  let filtered = applyFestival(mockProducts, festival);
 
   if (category && category !== 'all') {
     filtered = filtered.filter((p) => p.category === category);
@@ -95,6 +113,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     success: true,
     source: 'Local Backend Data Layer',
+    festival: festival?.slug ?? null,
     total: filtered.length,
     data: filtered,
   },

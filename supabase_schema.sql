@@ -29,8 +29,18 @@ CREATE TABLE IF NOT EXISTS public.products (
     in_stock BOOLEAN DEFAULT true,
     description TEXT,
     delivery_estimate TEXT,
+    -- Festival merchandising is cross-cutting: a product keeps ONE category but
+    -- can be sold into several festivals. festival_rank orders the collection.
+    festivals TEXT[] DEFAULT '{}',
+    festival_rank INT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Migration for databases created before festival merchandising existed.
+-- Safe to re-run.
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS festivals TEXT[] DEFAULT '{}';
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS festival_rank INT;
+CREATE INDEX IF NOT EXISTS products_festivals_idx ON public.products USING GIN (festivals);
 
 -- 3. Create Orders Table
 CREATE TABLE IF NOT EXISTS public.orders (
@@ -89,3 +99,32 @@ INSERT INTO public.products (id, name, category, price, original_price, rating, 
 ('real-7', 'Shubh Labh Emerald Green Jeweled Latkan Set', 'wall-hangings', 599, 899, 4.7, 73, 'Best Seller', 'EMERALD GREEN STONES', '/images/shubh_labh_emerald_jeweled_latkan.jpg', true, 'Auspicious entrance hanging pair studded with deep green emerald stones, golden bell tassels, and pearl rings.', 'Standard 2 Days Delivery'),
 ('real-8', 'Golden Yellow Brocade Decorative Table Mat', 'house-decor', 499, 699, 4.8, 51, 'Handcrafted', 'PEARL BEAD BORDER', '/images/yellow_brocade_thali_mat.jpg', true, 'Circular golden yellow brocade thali mat with pearl bead lace border for pooja thalis and centerpieces.', 'Express 4-Hour Delivery')
 ON CONFLICT (id) DO NOTHING;
+
+-- Festival tagging for the seed catalogue. Run this after the seed inserts (and
+-- re-run any time you retag) — it overwrites, so it is the single source of
+-- truth for which products appear during each festival window.
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 1  WHERE id = 'real-4';
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 2  WHERE id = 'real-6';
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 9  WHERE id = 'real-1';
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 10 WHERE id = 'real-5';
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 11 WHERE id = 'real-2';
+UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 12 WHERE id = 'real-8';
+UPDATE public.products SET festivals = '{diwali}',          festival_rank = NULL WHERE id = 'real-3';
+UPDATE public.products SET festivals = '{diwali,navratri}', festival_rank = NULL WHERE id = 'real-7';
+
+-- ========================================================
+-- GANESH CHATURTHI ASAN DROP (Sep 2026) — ranks 3-8 so the
+-- asans sit right after the two chowkis in the festival shelf.
+-- ========================================================
+INSERT INTO public.products (id, name, category, price, original_price, rating, reviews_count, badge, tag_overlay, image_url, in_stock, description, delivery_estimate, festivals, festival_rank) VALUES
+('real-9',  'Orange Gota Patti Pooja Asan with Pearl Border',   'festivals', 1199, 1699, 5.0, 38, 'New Arrival',     'HAND-EMBROIDERED GOTA PATTI', '/images/orange_gota_patti_pearl_asan.jpg',   true, 'Saffron silk pooja asan with hand-stitched gota patti floral medallions in pink, yellow and green, finished with a gold bead and pearl cluster border. Made for Ganpati sthapana.', 'Express 4-Hour Delivery',  '{ganesh-chaturthi,diwali,navratri}', 3),
+('real-10', 'Pom-Pom Rangoli Asan & Tealight Holder Set',        'festivals', 2499, 3499, 4.9, 27, 'Limited Edition', 'COMPLETE 13-PIECE SET',        '/images/pompom_rangoli_tealight_set.jpg',    true, 'Complete sthapana rangoli set: one large gota asan with red and yellow pom-poms and pearls, six matching mini asans, and six kundan-studded pearl tealight holders.', 'Standard 2 Days Delivery', '{ganesh-chaturthi,diwali}', 4),
+('real-11', 'Red Patola Print Asan with Gold Bead Border',       'festivals',  749, 1099, 4.8, 44, 'Handcrafted',     'PATOLA IKAT PRINT',            '/images/red_patola_gold_bead_asan.jpg',      true, 'Round pooja asan in traditional red Patola ikat print fabric, edged with gold ribbed beads and a ghungroo bead fringe. Available in multiple sizes.', 'Express 4-Hour Delivery', '{ganesh-chaturthi,diwali,navratri}', 5),
+('real-12', 'Mint Green Brocade Asan with Gold Bead Border',     'festivals',  649,  899, 4.9, 56, 'Best Seller',     'SET OF 8 AVAILABLE',           '/images/mint_brocade_gold_bead_asan.jpg',    true, 'Pastel mint brocade round asan with a ribbed gold bead and ghungroo cluster border. Sold individually; order eight for a full mandap or return-gift set.', 'Express 4-Hour Delivery', '{ganesh-chaturthi,diwali}', 6),
+('real-13', 'Brocade Gold Bead Asan — Mint & Rani Pink',         'festivals',  649,  899, 4.8, 31, 'New Arrival',     'CHOOSE YOUR COLOR',            '/images/mint_pink_brocade_asan_set.jpg',     true, 'Round brocade asan with a rich gold bead border, in your choice of mint green or rani pink. Mix both colours for a layered mandap look.', 'Express 4-Hour Delivery', '{ganesh-chaturthi,diwali}', 7),
+('real-14', 'Jute Mirror-Work Rangoli Mat with Red Pom-Poms',    'festivals',  899, 1299, 4.7, 22, 'Handcrafted',     'ECO-FRIENDLY JUTE',            '/images/jute_mirror_pompom_rangoli_mat.jpg', true, 'Large hand-coiled natural jute rangoli mat with concentric mirror rings, a lace-trimmed border and a red pom-pom centre. Eco-friendly base for Ganpati rangoli or a floating-flower urli.', 'Standard 2 Days Delivery', '{ganesh-chaturthi,diwali}', 8)
+ON CONFLICT (id) DO UPDATE SET
+  name = EXCLUDED.name, price = EXCLUDED.price, original_price = EXCLUDED.original_price,
+  badge = EXCLUDED.badge, tag_overlay = EXCLUDED.tag_overlay, image_url = EXCLUDED.image_url,
+  description = EXCLUDED.description, delivery_estimate = EXCLUDED.delivery_estimate,
+  festivals = EXCLUDED.festivals, festival_rank = EXCLUDED.festival_rank;

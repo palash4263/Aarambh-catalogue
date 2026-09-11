@@ -29,8 +29,6 @@ export default function Header({
 
   const navLinks = [
     { label: 'Catalogue', href: '/' },
-    { label: 'Festivals', href: '/collections/festivals' },
-    { label: 'House Decor', href: '/collections/house-decor' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
   ];
