@@ -27,7 +27,6 @@ export const FESTIVALS: Festival[] = [
       accent: '#E2711D',
       accentDark: '#C25E14',
       accentSoft: '#FDF0E2',
-      eyebrow: 'Ganpati Bappa Morya',
       headline: 'Bappa Deserves the Best Seat in the House',
       subhead:
         'Handcrafted brocade chowki asans, mirror-work rangoli mats, pooja thali mats and door latkans — everything you need to welcome Ganpati home.',
@@ -48,7 +47,6 @@ export const FESTIVALS: Festival[] = [
       accent: '#E65D5D',
       accentDark: '#D64D4D',
       accentSoft: '#FDEAEA',
-      eyebrow: 'Festive & House Decor Season',
       headline: 'Brighten Your Home with Handcrafted Festive Charm',
       subhead:
         'Mirror-work rangoli mats, brocade thali sets, and auspicious Shubh Labh door latkans delivered to your doorstep.',

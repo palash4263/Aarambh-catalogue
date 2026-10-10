@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight, ShieldCheck } from 'lucide-react';
 import { CartItem } from '@/types';
+import ProductMedia from './ProductMedia';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -80,9 +81,8 @@ export default function CartDrawer({
                 key={item.product.id}
                 className="flex gap-3 p-3 rounded-2xl bg-stone-50 border border-stone-100 hover:border-stone-200 transition-all"
               >
-                <img
-                  src={item.product.imageUrl}
-                  alt={item.product.name}
+                <ProductMedia
+                  product={item.product}
                   className="w-20 h-20 rounded-xl object-cover border border-stone-200 shrink-0"
                 />
                 <div className="flex-1 min-w-0 flex flex-col justify-between">

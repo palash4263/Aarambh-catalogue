@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { X, Send, CheckCircle2, MessageSquare, Phone } from 'lucide-react';
 import { Product } from '@/types';
+import ProductMedia from './ProductMedia';
 
 interface InquiryModalProps {
   isOpen: boolean;
@@ -58,9 +59,8 @@ export default function InquiryModal({ isOpen, onClose, product }: InquiryModalP
 
         {product && (
           <div className="flex items-center gap-3 p-3 bg-stone-50 rounded-2xl border border-stone-100 mb-4 text-xs">
-            <img
-              src={product.imageUrl}
-              alt={product.name}
+            <ProductMedia
+              product={product}
               className="w-12 h-12 rounded-xl object-cover border border-stone-200"
             />
             <div>

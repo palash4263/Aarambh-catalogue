@@ -59,6 +59,8 @@ export async function GET(request: NextRequest) {
           badge: p.badge,
           tagOverlay: p.tag_overlay,
           imageUrl: p.image_url,
+          galleryUrls: p.gallery_urls?.length ? p.gallery_urls : undefined,
+          videoUrl: p.video_url ?? undefined,
           inStock: p.in_stock,
           description: p.description,
           deliveryEstimate: p.delivery_estimate,

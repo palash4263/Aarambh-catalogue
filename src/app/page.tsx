@@ -4,12 +4,11 @@ import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeroBanner from '@/components/HeroBanner';
 import ProductGrid from '@/components/ProductGrid';
-import DeliveryModal from '@/components/DeliveryModal';
 import InquiryModal from '@/components/InquiryModal';
 import Footer from '@/components/Footer';
 import { mockProducts } from '@/data/products';
 import { getActiveFestival, applyFestival } from '@/data/festivals';
-import { Product, DeliveryLocation, Festival } from '@/types';
+import { Product, Festival } from '@/types';
 
 export default function Home() {
   // Which festival the storefront is dressed for. Resolved from the calendar so
@@ -24,17 +23,8 @@ export default function Home() {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState<boolean>(false);
-  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedProductForInquiry, setSelectedProductForInquiry] = useState<Product | null>(null);
-  
-  const [deliveryLocation, setDeliveryLocation] = useState<DeliveryLocation>({
-    pincode: '110001',
-    city: 'New Delhi',
-    state: 'Delhi',
-    expressAvailable: true,
-  });
-
   useEffect(() => {
     let cancelled = false;
 
@@ -83,8 +73,6 @@ export default function Home() {
       {/* Main Header */}
       <Header
         onOpenInquiry={() => handleOpenInquiryForProduct(null)}
-        onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}
-        location={deliveryLocation}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -108,13 +96,6 @@ export default function Home() {
       <Footer />
 
       {/* Delivery Pincode Modal */}
-      <DeliveryModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-        currentLocation={deliveryLocation}
-        onSaveLocation={(loc) => setDeliveryLocation(loc)}
-      />
-
       {/* Catalogue Quote Inquiry Modal */}
       <InquiryModal
         isOpen={isInquiryModalOpen}

@@ -2,8 +2,9 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Star, MessageSquare, Phone, ArrowUpRight } from 'lucide-react';
+import { Star, MessageSquare, Phone, ArrowUpRight, Play } from 'lucide-react';
 import { Product } from '@/types';
+import ProductMedia from './ProductMedia';
 
 interface ProductCardProps {
   product: Product;
@@ -23,11 +24,10 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
     <div className="group bg-white rounded-2xl overflow-hidden border border-stone-100 hover:border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative">
       
       {/* Product Image Link Container */}
-      <Link href={`/products/${product.id}`} className="relative aspect-square overflow-hidden bg-stone-100 block cursor-pointer">
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          loading="lazy"
+      <Link href={`/products/${product.id}`} className="relative aspect-[3/4] overflow-hidden bg-stone-100 block cursor-pointer">
+        <ProductMedia
+          product={product}
+          autoPlay
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
 
@@ -35,6 +35,13 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
         {product.badge && (
           <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-stone-900/90 text-white text-[10px] sm:text-[11px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-md shadow-md z-10 max-w-[calc(100%-1rem)] truncate">
             {product.badge}
+          </div>
+        )}
+
+        {/* Video indicator */}
+        {product.videoUrl && (
+          <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-md z-10" title="Has video">
+            <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
           </div>
         )}
 

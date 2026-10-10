@@ -3,24 +3,13 @@
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import DeliveryModal from '@/components/DeliveryModal';
 import InquiryModal from '@/components/InquiryModal';
-import { DeliveryLocation } from '@/types';
 import { Mail, Phone, Send, CheckCircle2 } from 'lucide-react';
 
 export default function ContactPage() {
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
-  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [submitted, setSubmitted] = useState(false);
-
-  const [deliveryLocation, setDeliveryLocation] = useState<DeliveryLocation>({
-    pincode: '110001',
-    city: 'New Delhi',
-    state: 'Delhi',
-    expressAvailable: true,
-  });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
@@ -30,8 +19,6 @@ export default function ContactPage() {
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
       <Header
         onOpenInquiry={() => setIsInquiryModalOpen(true)}
-        onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}
-        location={deliveryLocation}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -126,14 +113,6 @@ export default function ContactPage() {
       </main>
 
       <Footer />
-
-      <DeliveryModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-        currentLocation={deliveryLocation}
-        onSaveLocation={(loc) => setDeliveryLocation(loc)}
-      />
-
       <InquiryModal
         isOpen={isInquiryModalOpen}
         onClose={() => setIsInquiryModalOpen(false)}

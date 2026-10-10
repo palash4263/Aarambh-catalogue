@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS public.products (
     -- can be sold into several festivals. festival_rank orders the collection.
     festivals TEXT[] DEFAULT '{}',
     festival_rank INT,
+    video_url TEXT,
+    gallery_urls TEXT[] DEFAULT '{}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -40,6 +42,8 @@ CREATE TABLE IF NOT EXISTS public.products (
 -- Safe to re-run.
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS festivals TEXT[] DEFAULT '{}';
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS festival_rank INT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS video_url TEXT;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS gallery_urls TEXT[] DEFAULT '{}';
 CREATE INDEX IF NOT EXISTS products_festivals_idx ON public.products USING GIN (festivals);
 
 -- 3. Create Orders Table
@@ -86,7 +90,10 @@ CREATE POLICY "Allow public insert order_items" ON public.order_items FOR INSERT
 INSERT INTO public.categories (id, name, slug, description, item_count, hero_banner_url) VALUES
 ('festivals', 'Festival Special', 'festivals', 'Traditional handcrafted mirror rangoli mats, brocade thali mats, and auspicious door latkans.', 16, '/images/pink_mirror_rangoli_mat_with_diya.jpg'),
 ('house-decor', 'Pooja & House Decor', 'house-decor', 'Upholstered brocade pooja chowki stools, beaded table mats, and artisanal home decor.', 12, '/images/orange_brocade_puja_chowki_stool.jpg'),
-('wall-hangings', 'Wall & Door Hangings', 'wall-hangings', 'Jeweled Shubh Labh hanging latkans and handcrafted lotus door accents.', 8, '/images/gold_lotus_flower_latkan_with_pearls.jpg')
+('wall-hangings', 'Wall & Door Hangings', 'wall-hangings', 'Jeweled Shubh Labh hanging latkans and handcrafted lotus door accents.', 8, '/images/gold_lotus_flower_latkan_with_pearls.jpg'),
+('bandhanwar', 'Bandhanwar & Torans', 'bandhanwar', 'Handcrafted bandhanwars and door torans with zari lace, pom-poms and ghungroo drops to welcome guests at the entrance.', 1, '/images/yellow_pompom_zari_ghungroo_toran.jpg'),
+('festive-strings', 'Festive Strings', 'festive-strings', 'Handcrafted festive bell strings in bright colours, to hang at doorways, mandirs and windows.', 0, NULL),
+('chand-strings', 'Chand Strings', 'chand-strings', 'Handcrafted chand (moon) strings in bright colours, to hang at doorways, mandirs and windows.', 0, NULL)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.products (id, name, category, price, original_price, rating, reviews_count, badge, tag_overlay, image_url, in_stock, description, delivery_estimate) VALUES

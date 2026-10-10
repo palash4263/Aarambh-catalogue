@@ -34,6 +34,8 @@ export async function GET(
           badge: data.badge,
           tagOverlay: data.tag_overlay,
           imageUrl: data.image_url,
+          galleryUrls: data.gallery_urls?.length ? data.gallery_urls : undefined,
+          videoUrl: data.video_url ?? undefined,
           inStock: data.in_stock,
           description: data.description,
           deliveryEstimate: data.delivery_estimate,

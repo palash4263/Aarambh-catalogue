@@ -9,6 +9,10 @@ export interface Product {
   badge?: 'Best Seller' | 'New Arrival' | 'Handcrafted' | 'Express Delivery' | 'Limited Edition';
   tagOverlay?: string; // e.g. "CHOOSE YOUR COLOR", "CUSTOMIZABLE NAME", "SET OF 4"
   imageUrl: string;
+  /** Extra photos (e.g. other angles), shown after imageUrl on the product page. */
+  galleryUrls?: string[];
+  /** Optional product video, shown alongside the photo on the product page. */
+  videoUrl?: string;
   inStock: boolean;
   description: string;
   deliveryEstimate?: string;
@@ -26,7 +30,6 @@ export interface FestivalTheme {
   accent: string;
   accentDark: string;
   accentSoft: string;
-  eyebrow: string;
   headline: string;
   subhead: string;
   collectionTitle: string;
@@ -63,9 +66,3 @@ export interface Category {
   heroBannerUrl: string;
 }
 
-export interface DeliveryLocation {
-  pincode: string;
-  city: string;
-  state: string;
-  expressAvailable: boolean;
-}

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Product, Festival } from '@/types';
 import ProductCard from './ProductCard';
 import { FESTIVALS } from '@/data/festivals';
-import { SlidersHorizontal, Sparkles } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 
 interface ProductGridProps {
   products: Product[];
@@ -21,6 +21,9 @@ const CATEGORY_LABELS: Record<string, string> = {
   festivals: '🪔 Festival Lights & Diyas',
   'house-decor': '🏠 House Decor & Crafts',
   'wall-hangings': '🎈 Wall & Door Hangings',
+  bandhanwar: '🌼 Bandhanwar & Torans',
+  'festive-strings': '🔔 Festive Strings',
+  'chand-strings': '🌙 Chand Strings',
   'party-hampers': '🎁 Party & Gift Hampers',
 };
 
@@ -71,16 +74,10 @@ export default function ProductGrid({
 
         {/* Left: Collection Title */}
         <div>
-          <div
-            className="flex items-center gap-2 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-1"
-            style={{ color: theme.accentDark }}
-          >
-            <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            <span>{festival ? theme.eyebrow : 'Handcrafted Collection'}</span>
-          </div>
-          <h2 className="text-xl sm:text-3xl font-extrabold text-stone-900 font-display">
+          <h2 className="text-xl sm:text-3xl font-semibold text-[#2B1A12] font-['Cinzel',serif] tracking-[0.12em] leading-snug">
             {festival ? theme.collectionTitle : 'Festive & House Decor'}
           </h2>
+          <div className="mt-2 h-px w-20 sm:w-28 bg-gradient-to-r from-[#B8893B] via-[#E6C878] to-transparent" />
           {isExclusive && (
             <p className="text-xs sm:text-sm text-stone-500 mt-1.5">
               Showing {festival!.name} essentials only — our full decor range is
@@ -148,7 +145,7 @@ export default function ProductGrid({
               key={i}
               className="bg-white rounded-2xl border border-stone-100 overflow-hidden animate-pulse"
             >
-              <div className="aspect-square bg-stone-200/70" />
+              <div className="aspect-[3/4] bg-stone-200/70" />
               <div className="p-3 sm:p-4 space-y-2">
                 <div className="h-3 w-12 bg-stone-200/70 rounded" />
                 <div className="h-3 w-full bg-stone-200/70 rounded" />

@@ -3,22 +3,17 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Search, Menu, X, MessageSquare, Phone, MapPin } from 'lucide-react';
-import { DeliveryLocation } from '@/types';
+import { Search, Menu, X, MessageSquare, Phone } from 'lucide-react';
 import LogoMark from '@/components/Logo';
 
 interface HeaderProps {
   onOpenInquiry: () => void;
-  onOpenDeliveryModal: () => void;
-  location: DeliveryLocation;
   searchQuery: string;
   setSearchQuery: (q: string) => void;
 }
 
 export default function Header({
   onOpenInquiry,
-  onOpenDeliveryModal,
-  location,
   searchQuery,
   setSearchQuery,
 }: HeaderProps) {
@@ -83,20 +78,6 @@ export default function Header({
 
         {/* Right: Refined Utilities & Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 shrink-0">
-
-          {/* Delivery Location Pill */}
-          <button
-            onClick={onOpenDeliveryModal}
-            className="hidden lg:flex items-center gap-1.5 bg-stone-50 hover:bg-stone-100/90 border border-stone-200/80 rounded-full px-3 py-1.5 text-xs text-stone-700 font-medium transition-all hover:border-stone-300"
-            title="Change Delivery Location"
-          >
-            <MapPin className="w-3.5 h-3.5 text-[#E65D5D]" />
-            <span className="text-stone-400 font-normal">To:</span>
-            <span className="font-semibold text-stone-800 max-w-[80px] truncate">
-              {location.pincode || 'Select'}
-            </span>
-          </button>
-
           {/* Expandable / Sleek Search Bar */}
           <form onSubmit={handleSearchSubmit} className="relative hidden md:block">
             <input
@@ -178,21 +159,6 @@ export default function Header({
           )}
         </form>
       </div>
-
-      {/* Mobile "Deliver to" strip (matches the reference layout) */}
-      <button
-        onClick={onOpenDeliveryModal}
-        className="lg:hidden w-full flex items-center justify-center gap-2 bg-[#FDEAEA] border-t border-red-100 px-4 py-2 text-xs text-stone-700 font-medium active:bg-[#fbdada] transition-colors"
-      >
-        <MapPin className="w-3.5 h-3.5 text-[#E65D5D] shrink-0" />
-        <span className="truncate">
-          Deliver to <strong className="text-[#E65D5D]">{location.pincode || 'select pincode'}</strong>
-          {location.city ? ` · ${location.city}` : ''}
-        </span>
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#E65D5D] underline shrink-0">
-          Change
-        </span>
-      </button>
 
       {/* Mobile Menu Drawer Overlay */}
       {isMobileMenuOpen && (

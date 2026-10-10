@@ -4,21 +4,21 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import DeliveryModal from '@/components/DeliveryModal';
 import InquiryModal from '@/components/InquiryModal';
 import ProductCard from '@/components/ProductCard';
-import { Product, DeliveryLocation } from '@/types';
+import ProductMedia from '@/components/ProductMedia';
+import { Product } from '@/types';
 import { mockProducts } from '@/data/products';
 import {
   Star,
   MessageSquare,
-  Truck,
   ShieldCheck,
   RotateCcw,
   Sparkles,
   ChevronRight,
   Share2,
   Phone,
+  Play,
 } from 'lucide-react';
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
@@ -26,20 +26,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [catalogue, setCatalogue] = useState<Product[]>(mockProducts);
   const [loading, setLoading] = useState<boolean>(true);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState<boolean>(false);
-  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const [deliveryLocation, setDeliveryLocation] = useState<DeliveryLocation>({
-    pincode: '110001',
-    city: 'New Delhi',
-    state: 'Delhi',
-    expressAvailable: true,
-  });
-
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   useEffect(() => {
     async function fetchProductDetails() {
       try {
         setLoading(true);
+        setActiveIndex(0);
         const res = await fetch(`/api/products/${params.id}`, { cache: 'no-store' });
         const json = await res.json();
         if (json.success && json.data) {
@@ -105,6 +98,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     );
   }
 
+  // Main photo first, then any extra photos, then the video.
+  const media: { type: 'image' | 'video'; src: string }[] = [
+    ...(product.imageUrl ? [{ type: 'image' as const, src: product.imageUrl }] : []),
+    ...(product.galleryUrls ?? []).map((src) => ({ type: 'image' as const, src })),
+    ...(product.videoUrl ? [{ type: 'video' as const, src: product.videoUrl }] : []),
+  ];
+  const activeMedia = media[activeIndex] ?? media[0];
+
   const discountPercent = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
@@ -123,8 +124,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
       <Header
         onOpenInquiry={() => setIsInquiryModalOpen(true)}
-        onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}
-        location={deliveryLocation}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -147,21 +146,35 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
           {/* Left: Image Gallery View */}
           <div className="lg:col-span-6 space-y-4 lg:sticky lg:top-24">
-            <div className="relative aspect-square rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-stone-200 shadow-md">
-              <img
-                src={product.imageUrl}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+            <div className="relative w-full max-w-lg mx-auto aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-stone-200 shadow-md">
+              {activeMedia.type === 'video' ? (
+                <video
+                  key={activeMedia.src}
+                  src={activeMedia.src}
+                  poster={product.imageUrl || undefined}
+                  className="w-full h-full object-cover bg-black"
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={activeMedia.src}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              )}
 
               {/* Badge Overlays */}
-              {product.badge && (
+              {activeMedia.type === 'image' && product.badge && (
                 <div className="absolute top-4 left-4 bg-stone-900/90 text-white text-xs font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-md">
                   {product.badge}
                 </div>
               )}
 
-              {product.tagOverlay && (
+              {activeMedia.type === 'image' && product.tagOverlay && (
                 <div className="absolute bottom-4 left-4 right-4 text-center">
                   <span className="inline-block bg-stone-900/80 text-white text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/20">
                     {product.tagOverlay}
@@ -169,6 +182,32 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </div>
               )}
             </div>
+
+            {/* Thumbnails, only when there is more than one photo or a video */}
+            {media.length > 1 && (
+              <div className="flex flex-wrap gap-3 w-full max-w-lg mx-auto">
+                {media.map((m, i) => (
+                  <button
+                    key={m.src}
+                    type="button"
+                    onClick={() => setActiveIndex(i)}
+                    aria-label={m.type === 'video' ? 'Play video' : `Show photo ${i + 1}`}
+                    className={`relative w-16 sm:w-20 aspect-[3/4] rounded-xl overflow-hidden border-2 transition-colors ${i === activeIndex ? 'border-[#B8893B]' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                  >
+                    {m.type === 'video' ? (
+                      <ProductMedia product={product} className="w-full h-full object-cover" />
+                    ) : (
+                      <img src={m.src} alt="" className="w-full h-full object-cover" />
+                    )}
+                    {m.type === 'video' && (
+                      <span className="absolute inset-0 flex items-center justify-center bg-stone-900/40">
+                        <Play className="w-6 h-6 text-white fill-white" />
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right: Product Catalog Info & Inquiry Actions */}
@@ -217,29 +256,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               </div>
               <p className="text-[11px] text-stone-500">Available for retail & wholesale bulk inquiries</p>
             </div>
-
-            {/* Description */}
-            <div className="space-y-2 text-stone-700 text-sm leading-relaxed">
-              <h4 className="font-bold text-stone-900 text-xs uppercase tracking-wider">Product Details</h4>
-              <p>{product.description}</p>
-            </div>
-
-            {/* Delivery Estimator */}
-            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FDEAEA]/50 border border-red-100 flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs">
-              <div className="flex items-center gap-2.5 text-stone-800 min-w-0">
-                <Truck className="w-4 h-4 text-[#E65D5D] shrink-0" />
-                <span>
-                  Delivery to <strong>{deliveryLocation.pincode}</strong>: <strong className="text-[#E65D5D]">Express 4 Hours</strong>
-                </span>
-              </div>
-              <button
-                onClick={() => setIsDeliveryModalOpen(true)}
-                className="text-[#E65D5D] font-bold underline hover:text-[#d64d4d] shrink-0"
-              >
-                Change
-              </button>
-            </div>
-
             {/* Catalogue Inquiry Buttons */}
             <div className="space-y-3 pt-2">
               <a
@@ -324,14 +340,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       </div>
 
       <Footer />
-
-      <DeliveryModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-        currentLocation={deliveryLocation}
-        onSaveLocation={(loc) => setDeliveryLocation(loc)}
-      />
-
       <InquiryModal
         isOpen={isInquiryModalOpen}
         onClose={() => setIsInquiryModalOpen(false)}

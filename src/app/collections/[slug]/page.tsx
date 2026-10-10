@@ -3,27 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import ProductGrid from '@/components/ProductGrid';
-import DeliveryModal from '@/components/DeliveryModal';
 import InquiryModal from '@/components/InquiryModal';
 import Footer from '@/components/Footer';
-import { Product, DeliveryLocation } from '@/types';
+import { Product } from '@/types';
 import { Sparkles } from 'lucide-react';
 
 export default function CollectionPage({ params }: { params: { slug: string } }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState<boolean>(false);
-  const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const [deliveryLocation, setDeliveryLocation] = useState<DeliveryLocation>({
-    pincode: '110001',
-    city: 'New Delhi',
-    state: 'Delhi',
-    expressAvailable: true,
-  });
-
   useEffect(() => {
     async function fetchBackendData() {
       try {
@@ -46,6 +36,9 @@ export default function CollectionPage({ params }: { params: { slug: string } })
     festivals: '🪔 Festival Lights & Diyas Collection',
     'house-decor': '🏠 House Decor & Handicrafts',
     'wall-hangings': '🎈 Wall & Door Hanging Latkans',
+    bandhanwar: '🌼 Bandhanwar & Door Torans',
+    'festive-strings': '🔔 Festive Strings',
+    'chand-strings': '🌙 Chand Strings',
   };
 
   return (
@@ -55,8 +48,6 @@ export default function CollectionPage({ params }: { params: { slug: string } })
           setSelectedProduct(null);
           setIsInquiryModalOpen(true);
         }}
-        onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}
-        location={deliveryLocation}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
@@ -92,14 +83,6 @@ export default function CollectionPage({ params }: { params: { slug: string } })
       </main>
 
       <Footer />
-
-      <DeliveryModal
-        isOpen={isDeliveryModalOpen}
-        onClose={() => setIsDeliveryModalOpen(false)}
-        currentLocation={deliveryLocation}
-        onSaveLocation={(loc) => setDeliveryLocation(loc)}
-      />
-
       <InquiryModal
         isOpen={isInquiryModalOpen}
         onClose={() => setIsInquiryModalOpen(false)}

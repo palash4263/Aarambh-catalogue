@@ -38,6 +38,8 @@ const rows = mockProducts.map((p) => ({
   badge: p.badge ?? null,
   tag_overlay: p.tagOverlay ?? null,
   image_url: p.imageUrl,
+  gallery_urls: p.galleryUrls ?? [],
+  video_url: p.videoUrl ?? null,
   in_stock: p.inStock,
   description: p.description,
   delivery_estimate: p.deliveryEstimate ?? null,
