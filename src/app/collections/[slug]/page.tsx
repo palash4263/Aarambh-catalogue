@@ -33,12 +33,12 @@ export default function CollectionPage({ params }: { params: { slug: string } })
   }, [params.slug]);
 
   const categoryTitles: Record<string, string> = {
-    festivals: '🪔 Festival Lights & Diyas Collection',
-    'house-decor': '🏠 House Decor & Handicrafts',
+    festivals: 'Plates & Rangoli',
     'wall-hangings': '🎈 Wall & Door Hanging Latkans',
     bandhanwar: '🌼 Bandhanwar & Door Torans',
     'festive-strings': '🔔 Festive Strings',
     'chand-strings': '🌙 Chand Strings',
+    mats: '🌸 Mats',
   };
 
   return (

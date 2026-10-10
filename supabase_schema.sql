@@ -88,34 +88,28 @@ CREATE POLICY "Allow public insert order_items" ON public.order_items FOR INSERT
 -- ========================================================
 
 INSERT INTO public.categories (id, name, slug, description, item_count, hero_banner_url) VALUES
-('festivals', 'Festival Special', 'festivals', 'Traditional handcrafted mirror rangoli mats, brocade thali mats, and auspicious door latkans.', 16, '/images/pink_mirror_rangoli_mat_with_diya.jpg'),
-('house-decor', 'Pooja & House Decor', 'house-decor', 'Upholstered brocade pooja chowki stools, beaded table mats, and artisanal home decor.', 12, '/images/orange_brocade_puja_chowki_stool.jpg'),
+('festivals', 'Plates & Rangoli', 'festivals', 'Traditional handcrafted mirror rangoli mats, brocade thali mats, and auspicious door latkans.', 16, '/images/pink_mirror_rangoli_mat_with_diya.jpg'),
 ('wall-hangings', 'Wall & Door Hangings', 'wall-hangings', 'Jeweled Shubh Labh hanging latkans and handcrafted lotus door accents.', 8, '/images/gold_lotus_flower_latkan_with_pearls.jpg'),
 ('bandhanwar', 'Bandhanwar & Torans', 'bandhanwar', 'Handcrafted bandhanwars and door torans with zari lace, pom-poms and ghungroo drops to welcome guests at the entrance.', 1, '/images/yellow_pompom_zari_ghungroo_toran.jpg'),
 ('festive-strings', 'Festive Strings', 'festive-strings', 'Handcrafted festive bell strings in bright colours, to hang at doorways, mandirs and windows.', 0, NULL),
-('chand-strings', 'Chand Strings', 'chand-strings', 'Handcrafted chand (moon) strings in bright colours, to hang at doorways, mandirs and windows.', 0, NULL)
+('chand-strings', 'Chand Strings', 'chand-strings', 'Handcrafted chand (moon) strings in bright colours, to hang at doorways, mandirs and windows.', 0, NULL),
+('mats', 'Mats', 'mats', 'Handcrafted rangoli and decorative mats for pooja, festivals and home decor.', 0, NULL)
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO public.products (id, name, category, price, original_price, rating, reviews_count, badge, tag_overlay, image_url, in_stock, description, delivery_estimate) VALUES
 ('real-1', 'Pink Silk Mirror-Work Festive Rangoli Mat', 'festivals', 799, 1199, 4.9, 146, 'Best Seller', 'HANDCRAFTED MIRROR WORK', '/images/pink_mirror_rangoli_mat_with_diya.jpg', true, 'Vibrant hot pink silk circular rangoli mat embellished with intricate mirror artwork and pearl lace border for Diwali and home poojas.', 'Express 4-Hour Delivery'),
 ('real-2', 'Shubh Labh Pink Tassel Door Latkan (Pair)', 'wall-hangings', 549, 799, 4.8, 92, 'Best Seller', 'PAIR OF 2 LATKANS', '/images/shubh_labh_pink_tassel_hanging_latkan.jpg', true, 'Auspicious Shubh Labh door hanging pair featuring pink silk thread tassels, golden rings, and pearl detailing.', 'Express 4-Hour Delivery'),
 ('real-3', 'Handmade Lotus Flower Pearl Door Hanging Set', 'wall-hangings', 699, 999, 4.9, 118, 'Handcrafted', 'LOTUS DESIGN WITH PEARLS', '/images/gold_lotus_flower_latkan_with_pearls.jpg', true, 'Gold wire frame pink lotus flower hanging pair adorned with cascading white pearl bead tassels.', 'Standard 2 Days Delivery'),
-('real-4', 'Orange Brocade Pooja Chowki Stool with Ghungroo', 'house-decor', 1299, 1799, 4.9, 84, 'New Arrival', 'PUJA CHOWKI STOOL', '/images/orange_brocade_puja_chowki_stool.jpg', true, 'Handcrafted wooden pooja chowki upholstered in royal orange gold brocade with ghungroo bell feet.', 'Express 4-Hour Delivery'),
 ('real-5', 'Festive Beaded & Brocade Thali Mat Trio Set', 'festivals', 1499, 2199, 5.0, 205, 'Best Seller', 'SET OF 3 MATS', '/images/beaded_festive_mats_trio_studio.jpg', true, 'Set of 3 round decorative thali mats in Orange, Yellow, and Red brocade fabric with golden pearl borders.', 'Express 4-Hour Delivery'),
-('real-6', 'Pink & Yellow Dual-Tone Royal Pooja Chowki', 'house-decor', 1599, 2299, 4.8, 64, 'Limited Edition', 'DUAL TONE BROCADE', '/images/pink_yellow_brocade_chowki_top_view.jpg', true, 'Royal square pooja chowki featuring pink brocade base and golden yellow central panel bordered with lace and pearls.', 'Express 4-Hour Delivery'),
-('real-7', 'Shubh Labh Emerald Green Jeweled Latkan Set', 'wall-hangings', 599, 899, 4.7, 73, 'Best Seller', 'EMERALD GREEN STONES', '/images/shubh_labh_emerald_jeweled_latkan.jpg', true, 'Auspicious entrance hanging pair studded with deep green emerald stones, golden bell tassels, and pearl rings.', 'Standard 2 Days Delivery'),
-('real-8', 'Golden Yellow Brocade Decorative Table Mat', 'house-decor', 499, 699, 4.8, 51, 'Handcrafted', 'PEARL BEAD BORDER', '/images/yellow_brocade_thali_mat.jpg', true, 'Circular golden yellow brocade thali mat with pearl bead lace border for pooja thalis and centerpieces.', 'Express 4-Hour Delivery')
+('real-7', 'Shubh Labh Emerald Green Jeweled Latkan Set', 'wall-hangings', 599, 899, 4.7, 73, 'Best Seller', 'EMERALD GREEN STONES', '/images/shubh_labh_emerald_jeweled_latkan.jpg', true, 'Auspicious entrance hanging pair studded with deep green emerald stones, golden bell tassels, and pearl rings.', 'Standard 2 Days Delivery')
 ON CONFLICT (id) DO NOTHING;
 
 -- Festival tagging for the seed catalogue. Run this after the seed inserts (and
 -- re-run any time you retag) — it overwrites, so it is the single source of
 -- truth for which products appear during each festival window.
-UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 1  WHERE id = 'real-4';
-UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 2  WHERE id = 'real-6';
 UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 9  WHERE id = 'real-1';
 UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 10 WHERE id = 'real-5';
 UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 11 WHERE id = 'real-2';
-UPDATE public.products SET festivals = '{ganesh-chaturthi,diwali}', festival_rank = 12 WHERE id = 'real-8';
 UPDATE public.products SET festivals = '{diwali}',          festival_rank = NULL WHERE id = 'real-3';
 UPDATE public.products SET festivals = '{diwali,navratri}', festival_rank = NULL WHERE id = 'real-7';
 

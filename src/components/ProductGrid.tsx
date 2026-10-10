@@ -18,12 +18,12 @@ const DEFAULT_THEME = FESTIVALS.find((f) => f.slug === 'diwali')!.theme;
 
 // Display names for the category slugs used in the database.
 const CATEGORY_LABELS: Record<string, string> = {
-  festivals: '🪔 Festival Lights & Diyas',
-  'house-decor': '🏠 House Decor & Crafts',
+  festivals: 'Plates & Rangoli',
   'wall-hangings': '🎈 Wall & Door Hangings',
   bandhanwar: '🌼 Bandhanwar & Torans',
   'festive-strings': '🔔 Festive Strings',
   'chand-strings': '🌙 Chand Strings',
+  mats: '🌸 Mats',
   'party-hampers': '🎁 Party & Gift Hampers',
 };
 

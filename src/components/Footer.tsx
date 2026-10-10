@@ -73,8 +73,6 @@ export default function Footer() {
             <ul className="space-y-1.5 text-xs text-stone-400">
               <li><a href="#festivals" className="hover:text-white transition-colors">Festival Lights</a></li>
               <li><a href="#festivals" className="hover:text-white transition-colors">Brass Diyas</a></li>
-              <li><a href="#house-decor" className="hover:text-white transition-colors">Macrame Art</a></li>
-              <li><a href="#house-decor" className="hover:text-white transition-colors">Ceramic Vases</a></li>
               <li><a href="#party-hampers" className="hover:text-white transition-colors">Party Hampers</a></li>
             </ul>
           </div>
