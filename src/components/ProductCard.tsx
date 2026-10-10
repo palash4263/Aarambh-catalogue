@@ -51,14 +51,16 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
       {/* Details Container */}
       <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between gap-2.5 sm:gap-3">
         <div>
-          {/* Rating & Review Count */}
-          <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-amber-500 font-semibold mb-1">
-            <div className="flex items-center">
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span className="ml-1 text-stone-800">{product.rating}</span>
+          {/* Rating & Review Count (hidden until a product has reviews) */}
+          {product.reviewsCount > 0 && (
+            <div className="flex items-center gap-1.5 text-[11px] sm:text-xs text-amber-500 font-semibold mb-1">
+              <div className="flex items-center">
+                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span className="ml-1 text-stone-800">{product.rating}</span>
+              </div>
+              <span className="text-stone-400 font-normal">({product.reviewsCount})</span>
             </div>
-            <span className="text-stone-400 font-normal">({product.reviewsCount})</span>
-          </div>
+          )}
 
           {/* Product Name Link */}
           <Link href={`/products/${product.id}`} className="block">

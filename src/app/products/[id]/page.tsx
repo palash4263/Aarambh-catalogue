@@ -195,14 +195,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 {product.name}
               </h1>
 
-              {/* Rating */}
-              <div className="flex items-center gap-2 mt-3 text-xs font-semibold text-amber-500">
-                <div className="flex items-center bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60">
-                  <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span className="ml-1 text-stone-900">{product.rating}</span>
+              {/* Rating (hidden until a product has reviews) */}
+              {product.reviewsCount > 0 && (
+                <div className="flex items-center gap-2 mt-3 text-xs font-semibold text-amber-500">
+                  <div className="flex items-center bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60">
+                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <span className="ml-1 text-stone-900">{product.rating}</span>
+                  </div>
+                  <span className="text-stone-500 font-normal">({product.reviewsCount} Customer Reviews)</span>
                 </div>
-                <span className="text-stone-500 font-normal">({product.reviewsCount} Customer Reviews)</span>
-              </div>
+              )}
             </div>
 
             {/* Price Box */}
