@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DeliveryModal from '@/components/DeliveryModal';
@@ -85,7 +84,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-        <AnnouncementBar />
         <div className="flex-1 flex items-center justify-center text-stone-500 text-sm">
           Loading catalog item...
         </div>
@@ -96,7 +94,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   if (!product) {
     return (
       <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-        <AnnouncementBar />
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-4">
           <h2 className="text-2xl font-bold text-stone-900 font-display">Product Not Found</h2>
           <p className="text-stone-500 text-sm">The item you are looking for is unavailable in our catalog.</p>
@@ -124,8 +121,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-      <AnnouncementBar />
-
       <Header
         onOpenInquiry={() => setIsInquiryModalOpen(true)}
         onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}

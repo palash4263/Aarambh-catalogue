@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import ProductGrid from '@/components/ProductGrid';
 import DeliveryModal from '@/components/DeliveryModal';
@@ -51,8 +50,6 @@ export default function CollectionPage({ params }: { params: { slug: string } })
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-      <AnnouncementBar />
-
       <Header
         onOpenInquiry={() => {
           setSelectedProduct(null);

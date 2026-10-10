@@ -33,7 +33,6 @@ export interface FestivalTheme {
   bannerUrl: string;
   bannerCaption: string;
   ctaLabel: string;
-  announcement: string;
 }
 
 export interface Festival {

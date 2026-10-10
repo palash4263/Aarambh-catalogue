@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DeliveryModal from '@/components/DeliveryModal';
@@ -23,7 +22,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-      <AnnouncementBar />
       <Header
         onOpenInquiry={() => setIsInquiryModalOpen(true)}
         onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}

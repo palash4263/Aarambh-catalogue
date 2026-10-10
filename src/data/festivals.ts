@@ -35,7 +35,6 @@ export const FESTIVALS: Festival[] = [
       bannerUrl: '/images/yellow_brocade_thali_mat.jpg',
       bannerCaption: 'Handpicked Ganpati Sthapana Collection',
       ctaLabel: 'Shop Ganpati Decor',
-      announcement: 'Express 4-Hour Delivery — order in time for Sthapana!',
     },
   },
   {
@@ -57,7 +56,6 @@ export const FESTIVALS: Festival[] = [
       bannerUrl: '/images/festive_couple_diwali_celebration.jpg',
       bannerCaption: 'Handpicked Diwali Collection',
       ctaLabel: 'Shop Diwali Collection',
-      announcement: 'Express 4-Hour Festival Delivery Available in Select Cities!',
     },
   },
 ];

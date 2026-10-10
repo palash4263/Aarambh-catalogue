@@ -67,7 +67,7 @@ export default function HeroBanner({ festival = null }: HeroBannerProps) {
               )}
             </div>
 
-            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 font-display tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-normal text-stone-900 font-['Grand_Hotel',cursive] leading-tight">
               {theme.headline}
             </h1>
 

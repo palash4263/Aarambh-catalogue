@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import HeroBanner from '@/components/HeroBanner';
 import ProductGrid from '@/components/ProductGrid';
@@ -81,9 +80,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-      {/* Top Banner */}
-      <AnnouncementBar festival={festival} />
-
       {/* Main Header */}
       <Header
         onOpenInquiry={() => handleOpenInquiryForProduct(null)}

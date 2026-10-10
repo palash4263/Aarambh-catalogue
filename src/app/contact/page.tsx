@@ -1,13 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import AnnouncementBar from '@/components/AnnouncementBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DeliveryModal from '@/components/DeliveryModal';
 import InquiryModal from '@/components/InquiryModal';
 import { DeliveryLocation } from '@/types';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Phone, Send, CheckCircle2 } from 'lucide-react';
 
 export default function ContactPage() {
   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
@@ -29,7 +28,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5]">
-      <AnnouncementBar />
       <Header
         onOpenInquiry={() => setIsInquiryModalOpen(true)}
         onOpenDeliveryModal={() => setIsDeliveryModalOpen(true)}
@@ -69,16 +67,6 @@ export default function ContactPage() {
                   <a href="mailto:monu.tani@gmail.com" className="break-all hover:text-[#E65D5D] transition-colors">
                     monu.tani@gmail.com
                   </a>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-full bg-white text-[#E65D5D] flex items-center justify-center shadow-sm shrink-0">
-                  <MapPin className="w-4 h-4" />
-                </div>
-                <div>
-                  <span className="block font-semibold">Address</span>
-                  <span>Design Hub, Connaught Place, New Delhi 110001</span>
                 </div>
               </div>
             </div>
