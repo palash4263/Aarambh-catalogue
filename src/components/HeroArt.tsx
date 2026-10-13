@@ -58,39 +58,3 @@ export function Toran({ className = '' }: { className?: string }) {
     </svg>
   );
 }
-
-/** One lit diya: a soft glow, a flickering flame, and a clay bowl resting on the floor line. */
-function Diya({ x, floor }: { x: number; floor: number }) {
-  return (
-    <g>
-      <circle cx={x} cy={floor - 34} r="36" fill="#F5CBA7" opacity="0.75" />
-      <g className="animate-flicker">
-        <path d={`M${x} ${floor - 58} C${x + 12} ${floor - 40} ${x + 11} ${floor - 22} ${x} ${floor - 18} C${x - 11} ${floor - 22} ${x - 12} ${floor - 40} ${x} ${floor - 58}Z`} fill="#F5B83D" />
-        <path d={`M${x} ${floor - 44} C${x + 6} ${floor - 34} ${x + 5} ${floor - 25} ${x} ${floor - 22} C${x - 5} ${floor - 25} ${x - 6} ${floor - 34} ${x} ${floor - 44}Z`} fill="#FFE7A3" />
-      </g>
-      <path d={`M${x - 44} ${floor} Q${x} ${floor + 46} ${x + 44} ${floor} Z`} fill="#C45A30" />
-    </g>
-  );
-}
-
-/**
- * A gold double-line arch over a peach sun, with two diyas at its base and a
- * few rangoli dots. The floor line sits at y = 490 of 600, so the parent's
- * floor band must be 110/520 of this artwork's rendered width.
- */
-export function DiyaArch({ className = '' }: { className?: string }) {
-  const floor = 490;
-  return (
-    <svg viewBox="0 0 520 600" className={className} aria-hidden="true">
-      <circle cx="260" cy="260" r="260" fill="#F6DDD0" />
-      <path d={`M60 ${floor} V250 A200 200 0 0 1 460 250 V${floor}`} fill="none" stroke="#D4A447" strokeWidth="2.5" />
-      <path d={`M78 ${floor} V250 A182 182 0 0 1 442 250 V${floor}`} fill="none" stroke="#E2C27A" strokeWidth="1.2" />
-      <Diya x={140} floor={floor} />
-      <Diya x={380} floor={floor} />
-      <circle cx="220" cy="535" r="5" fill="#E8893A" />
-      <circle cx="250" cy="548" r="4.5" fill="#E06B6B" />
-      <circle cx="280" cy="538" r="5" fill="#E8893A" />
-      <circle cx="310" cy="550" r="4.5" fill="#F5C451" />
-    </svg>
-  );
-}
