@@ -44,13 +44,16 @@ export default function ProductGrid({
   // Build the category tiles from the categories actually present, so a tile
   // can never point at an empty category and no category is left unreachable.
   // Each tile shows the first product in its category as its thumbnail.
+  const categoryTiles = Array.from(new Set(products.map((p) => p.category))).map((id) => ({
+    id,
+    label: CATEGORY_LABELS[id] || id.replace(/-/g, ' '),
+    cover: products.find((p) => p.category === id),
+  }));
+  // "All" gets a photo of its own — one not already used by a category tile.
+  const allCover = products.find((p) => p.imageUrl && !categoryTiles.some((t) => t.cover === p));
   const categories: { id: string; label: string; cover?: Product }[] = [
-    { id: 'all', label: festival ? `All ${festival.name} Picks` : 'All Products' },
-    ...Array.from(new Set(products.map((p) => p.category))).map((id) => ({
-      id,
-      label: CATEGORY_LABELS[id] || id.replace(/-/g, ' '),
-      cover: products.find((p) => p.category === id),
-    })),
+    { id: 'all', label: festival ? `All ${festival.name} Picks` : 'All Products', cover: allCover },
+    ...categoryTiles,
   ];
 
   // Filter products based on search and category
@@ -70,7 +73,7 @@ export default function ProductGrid({
   });
 
   return (
-    <section id="catalog" className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-5 sm:space-y-6">
+    <section id="catalog" className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-4 pb-6 sm:pb-8 space-y-5 sm:space-y-6">
 
       {/* Section Header Matching Reference Screenshot */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-stone-200/60 pb-4 gap-3 sm:gap-4">
@@ -91,15 +94,9 @@ export default function ProductGrid({
 
         {/* Right: Item Count Header with Accent Underline (Matching Screenshot '37 total results') */}
         <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
-          <div className="relative pb-1 shrink-0">
-            <span className="text-[#71717A] text-xs sm:text-sm font-medium">
-              <strong className="text-stone-900 font-bold">{sortedProducts.length}</strong> total results
-            </span>
-            <div
-              className="absolute bottom-0 right-0 left-0 h-0.5 rounded-full"
-              style={{ backgroundColor: theme.accent }}
-            ></div>
-          </div>
+          <span className="text-stone-500 text-xs sm:text-sm shrink-0">
+            {sortedProducts.length} {sortedProducts.length === 1 ? 'product' : 'products'}
+          </span>
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-1 bg-white border border-stone-200 rounded-full pl-3 pr-2 py-1.5 text-xs text-stone-700 font-medium min-w-0">
@@ -124,7 +121,7 @@ export default function ProductGrid({
           is more. Hidden during an exclusive festival: the whole shelf is the
           festival collection, so splitting it by category only buries products. */}
       {!isExclusive && (
-      <div className="flex items-start gap-3 sm:gap-5 overflow-x-auto scrollbar-none snap-x -mx-3 px-3 sm:mx-0 sm:px-0 pb-1">
+      <div className="flex items-start lg:justify-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none snap-x -mx-3 px-3 sm:mx-0 sm:px-0 pb-1">
         {categories.map((cat) => {
           const active = selectedCategory === cat.id;
           return (
@@ -138,8 +135,8 @@ export default function ProductGrid({
               <span
                 className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[3px] transition-all ${
                   active
-                    ? 'bg-gradient-to-br from-[#B8893B] via-[#E6C878] to-[#B8893B] shadow-md'
-                    : 'bg-stone-200/80 group-hover:bg-[#E6C878]/70'
+                    ? 'bg-[#7A1730] shadow-md'
+                    : 'bg-stone-200/80 group-hover:bg-[#7A1730]/40'
                 }`}
               >
                 <span className="block w-full h-full rounded-full overflow-hidden bg-[#FAF8F5] ring-2 ring-[#FAF8F5]">
@@ -179,7 +176,7 @@ export default function ProductGrid({
               key={i}
               className="bg-white rounded-2xl border border-stone-100 overflow-hidden animate-pulse"
             >
-              <div className="aspect-[3/4] bg-stone-200/70" />
+              <div className="aspect-square bg-stone-200/70" />
               <div className="p-3 sm:p-4 space-y-2">
                 <div className="h-3 w-12 bg-stone-200/70 rounded" />
                 <div className="h-3 w-full bg-stone-200/70 rounded" />

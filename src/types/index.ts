@@ -31,6 +31,8 @@ export interface FestivalTheme {
   accentDark: string;
   accentSoft: string;
   headline: string;
+  /** Part of the headline to set in maroon as its focal point, e.g. "We Create It". */
+  headlineAccent?: string;
   subhead: string;
   collectionTitle: string;
   bannerUrl: string;

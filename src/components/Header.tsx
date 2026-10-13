@@ -57,7 +57,7 @@ export default function Header({
         Diwali Collection 2026
         <span className="hidden sm:inline"> · Handcrafted in India</span>
         <span className="mx-1.5 text-[#E6C878]">·</span>
-        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="underline-offset-2 hover:underline">
+        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="font-semibold underline underline-offset-2 decoration-[#E6C878]/70 hover:decoration-[#E6C878]">
           Order on WhatsApp<span className="hidden sm:inline"> +91 97909 96188</span>
         </a>
       </div>
@@ -94,13 +94,17 @@ export default function Header({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3.5 py-1.5 rounded-full text-xs tracking-wide transition-all ${
-                    isActive
-                      ? 'bg-[#7A1730]/[0.07] text-[#7A1730] font-semibold'
-                      : 'text-stone-600 font-medium hover:text-[#7A1730] hover:bg-[#7A1730]/[0.05]'
+                  className={`relative px-3.5 py-2 text-xs tracking-wide transition-colors ${
+                    isActive ? 'text-[#7A1730] font-semibold' : 'text-stone-600 font-medium hover:text-[#7A1730]'
                   }`}
                 >
                   {link.label}
+                  {/* Gold underline marks the current page */}
+                  <span
+                    className={`absolute left-3.5 right-3.5 -bottom-0.5 h-[2px] rounded-full bg-[#C9A13B] transition-opacity ${
+                      isActive ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
                 </Link>
               );
             })}

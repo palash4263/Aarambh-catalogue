@@ -167,16 +167,8 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
               {/* Badge Overlays */}
               {activeMedia.type === 'image' && product.badge && (
-                <div className="absolute top-4 left-4 bg-stone-900/90 text-white text-xs font-bold px-3.5 py-1.5 rounded-full backdrop-blur-md shadow-md">
+                <div className="absolute top-4 left-4 bg-[#FDF5EC]/95 text-[#7A1730] text-xs font-semibold tracking-wide px-3.5 py-1.5 rounded-full shadow-sm">
                   {product.badge}
-                </div>
-              )}
-
-              {activeMedia.type === 'image' && product.tagOverlay && (
-                <div className="absolute bottom-4 left-4 right-4 text-center">
-                  <span className="inline-block bg-stone-900/80 text-white text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-lg backdrop-blur-md border border-white/20">
-                    {product.tagOverlay}
-                  </span>
                 </div>
               )}
             </div>
@@ -223,6 +215,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 font-display leading-tight">
                 {product.name}
               </h1>
+              {product.tagOverlay && (
+                <p className="mt-2 text-xs text-stone-500 uppercase tracking-wider">{product.tagOverlay}</p>
+              )}
             </div>
 
             {/* Price Box */}

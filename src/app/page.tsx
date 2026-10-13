@@ -78,7 +78,7 @@ export default function Home() {
       />
 
       {/* Main Content Body */}
-      <main className="flex-1 space-y-4">
+      <main className="flex-1">
         {/* Category Hero Banner */}
         <HeroBanner festival={festival} />
 

@@ -24,16 +24,16 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
     <div className="group bg-white rounded-2xl overflow-hidden border border-stone-100 hover:border-stone-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative">
       
       {/* Product Image Link Container */}
-      <Link href={`/products/${product.id}`} className="relative aspect-[3/4] overflow-hidden bg-stone-100 block cursor-pointer">
+      <Link href={`/products/${product.id}`} className="relative aspect-square overflow-hidden bg-stone-100 block cursor-pointer">
         <ProductMedia
           product={product}
           autoPlay
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
 
-        {/* Top-Left Dark Pill Badge */}
+        {/* Single badge, cream with maroon text */}
         {product.badge && (
-          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-stone-900/90 text-white text-[10px] sm:text-[11px] font-bold px-2 sm:px-3 py-0.5 sm:py-1 rounded-full backdrop-blur-md shadow-md z-10 max-w-[calc(100%-1rem)] truncate">
+          <div className="absolute top-2 left-2 sm:top-3 sm:left-3 bg-[#FDF5EC]/95 text-[#7A1730] text-[10px] sm:text-[11px] font-semibold tracking-wide px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-sm z-10 max-w-[calc(100%-1rem)] truncate">
             {product.badge}
           </div>
         )}
@@ -42,15 +42,6 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
         {product.videoUrl && (
           <div className="absolute top-2 right-2 sm:top-3 sm:right-3 w-7 h-7 rounded-full bg-white/90 text-stone-900 flex items-center justify-center shadow-md z-10" title="Has video">
             <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
-          </div>
-        )}
-
-        {/* Image Text Tag Overlay */}
-        {product.tagOverlay && (
-          <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 text-center z-10">
-            <span className="inline-block max-w-full truncate bg-stone-900/70 text-white text-[9px] sm:text-[10px] font-bold tracking-widest uppercase px-2 sm:px-2.5 py-1 rounded-md backdrop-blur-md border border-white/20">
-              {product.tagOverlay}
-            </span>
           </div>
         )}
       </Link>
@@ -75,6 +66,13 @@ export default function ProductCard({ product, onInquire }: ProductCardProps) {
               {product.name}
             </h3>
           </Link>
+
+          {/* Detail line (formerly an overlay on the photo) */}
+          {product.tagOverlay && (
+            <p className="mt-1 text-[10px] sm:text-[11px] text-stone-500 uppercase tracking-wider truncate">
+              {product.tagOverlay}
+            </p>
+          )}
         </div>
 
         {/* Delivery Note */}

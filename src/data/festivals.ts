@@ -47,9 +47,10 @@ export const FESTIVALS: Festival[] = [
       accent: '#E65D5D',
       accentDark: '#D64D4D',
       accentSoft: '#FDEAEA',
-      headline: 'Brighten Your Home with Handcrafted Festive Charm',
+      headline: 'You Name It, We Create It',
+      headlineAccent: 'We Create It',
       subhead:
-        'Mirror-work rangoli mats, brocade thali sets, and auspicious Shubh Labh door latkans delivered to your doorstep.',
+        'Tell us your idea, whether colours, names or sizes, and we’ll handcraft it for your celebration. Or shop our ready Diwali collection.',
       collectionTitle: 'Diwali Collection',
       bannerUrl: '/images/festive_couple_diwali_celebration.jpg',
       bannerCaption: 'Handpicked Diwali Collection',
