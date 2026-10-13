@@ -34,11 +34,11 @@ export default function CollectionPage({ params }: { params: { slug: string } })
 
   const categoryTitles: Record<string, string> = {
     festivals: 'Plates & Rangoli',
-    'wall-hangings': '🎈 Wall & Door Hanging Latkans',
-    bandhanwar: '🌼 Bandhanwar & Door Torans',
-    'festive-strings': '🔔 Festive Strings',
-    'chand-strings': '🌙 Chand Strings',
-    mats: '🌸 Mats',
+    'wall-hangings': 'Wall & Door Hanging Latkans',
+    bandhanwar: 'Bandhanwar & Door Torans',
+    'festive-strings': 'Festive Strings',
+    'chand-strings': 'Chand Strings',
+    mats: 'Mats',
   };
 
   return (

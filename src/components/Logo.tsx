@@ -5,8 +5,8 @@ import React from 'react';
 interface LogoMarkProps {
   /** Tailwind size classes for the tile, e.g. "w-9 h-9" */
   className?: string;
-  /** Tile shape: rounded square (header) or circle (footer) */
-  variant?: 'tile' | 'circle';
+  /** Tile shape: rounded square or circle (footer), or a bare line-drawn diya (header) */
+  variant?: 'tile' | 'circle' | 'outline';
 }
 
 /**
@@ -15,6 +15,20 @@ interface LogoMarkProps {
  * and inherits the surrounding text color where needed.
  */
 export function LogoMark({ className = 'w-9 h-9', variant = 'tile' }: LogoMarkProps) {
+  if (variant === 'outline') {
+    return (
+      <svg viewBox="0 0 32 32" fill="none" className={`${className} shrink-0 transition-all`} aria-hidden="true">
+        {/* Flame */}
+        <path d="M16 3.5c2.6 3 3.9 5.2 3.9 7.1a3.9 3.9 0 1 1-7.8 0c0-1.9 1.3-4.1 3.9-7.1Z" fill="#C9A13B" />
+        <path d="M16 7.6c1.05 1.35 1.55 2.3 1.55 3.05a1.55 1.55 0 1 1-3.1 0c0-.75.5-1.7 1.55-3.05Z" fill="#FDF5EC" />
+        {/* Bowl, drawn as an outline */}
+        <path d="M4.5 17.5h23c0 4.6-5.15 7.6-11.5 7.6S4.5 22.1 4.5 17.5Z" stroke="#7A1730" strokeWidth="1.8" strokeLinejoin="round" />
+        {/* Base */}
+        <path d="M10.5 28h11" stroke="#7A1730" strokeWidth="1.8" strokeLinecap="round" />
+      </svg>
+    );
+  }
+
   return (
     <div
       className={`${className} ${

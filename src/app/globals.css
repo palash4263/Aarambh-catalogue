@@ -114,3 +114,18 @@
     border-radius: 4px;
   }
 }
+
+/* Diya flames in the hero sway gently from their base */
+@keyframes flicker {
+  0%, 100% { transform: scale(1, 1); }
+  40% { transform: scale(0.94, 1.06); }
+  70% { transform: scale(1.04, 0.95); }
+}
+.animate-flicker {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 1.8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-flicker { animation: none; }
+}

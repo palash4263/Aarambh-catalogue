@@ -8,12 +8,10 @@ import InquiryModal from '@/components/InquiryModal';
 import ProductCard from '@/components/ProductCard';
 import ProductMedia from '@/components/ProductMedia';
 import { Product } from '@/types';
-import { mockProducts } from '@/data/products';
+import { mockProducts, mockCategories } from '@/data/products';
 import {
-  Star,
   MessageSquare,
   ShieldCheck,
-  RotateCcw,
   Sparkles,
   ChevronRight,
   Share2,
@@ -135,7 +133,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
           <Link href="/" className="hover:text-stone-900 shrink-0">Catalogue</Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
           <Link href={`/collections/${product.category}`} className="hover:text-stone-900 capitalize shrink-0">
-            {product.category.replace('-', ' ')}
+            {mockCategories.find((c) => c.id === product.category)?.name ?? product.category.replace(/-/g, ' ')}
           </Link>
           <ChevronRight className="w-3.5 h-3.5 shrink-0" />
           <span className="text-stone-900 font-semibold truncate max-w-[10rem] sm:max-w-xs">{product.name}</span>
@@ -215,10 +213,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
             {/* Title & Category */}
             <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-[10px] sm:text-xs font-bold text-[#E65D5D] uppercase tracking-wider bg-[#FDEAEA] px-2.5 sm:px-3 py-1 rounded-full">
-                  Artisanal Collection Item
-                </span>
+              <div className="flex items-center justify-end gap-2 mb-2">
                 <button className="text-stone-400 hover:text-stone-700 flex items-center gap-1 text-xs shrink-0">
                   <Share2 className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Share Product</span>
@@ -228,17 +223,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 font-display leading-tight">
                 {product.name}
               </h1>
-
-              {/* Rating (hidden until a product has reviews) */}
-              {product.reviewsCount > 0 && (
-                <div className="flex items-center gap-2 mt-3 text-xs font-semibold text-amber-500">
-                  <div className="flex items-center bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60">
-                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    <span className="ml-1 text-stone-900">{product.rating}</span>
-                  </div>
-                  <span className="text-stone-500 font-normal">({product.reviewsCount} Customer Reviews)</span>
-                </div>
-              )}
             </div>
 
             {/* Price Box */}
@@ -278,7 +262,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             </div>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-3 gap-2 pt-4 border-t border-stone-100 text-[10px] sm:text-[11px] text-stone-600 text-center">
+            <div className="grid grid-cols-2 gap-2 pt-4 border-t border-stone-100 text-[10px] sm:text-[11px] text-stone-600 text-center">
               <div className="space-y-1">
                 <Sparkles className="w-4 h-4 mx-auto text-amber-500" />
                 <span>100% Handcrafted</span>
@@ -286,10 +270,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <div className="space-y-1">
                 <ShieldCheck className="w-4 h-4 mx-auto text-emerald-500" />
                 <span>Verified Quality</span>
-              </div>
-              <div className="space-y-1">
-                <RotateCcw className="w-4 h-4 mx-auto text-blue-500" />
-                <span>Customization Available</span>
               </div>
             </div>
 

@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { Product, Festival } from '@/types';
 import ProductCard from './ProductCard';
+import ProductMedia from './ProductMedia';
 import { FESTIVALS } from '@/data/festivals';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, Sparkles } from 'lucide-react';
 
 interface ProductGridProps {
   products: Product[];
@@ -19,12 +20,12 @@ const DEFAULT_THEME = FESTIVALS.find((f) => f.slug === 'diwali')!.theme;
 // Display names for the category slugs used in the database.
 const CATEGORY_LABELS: Record<string, string> = {
   festivals: 'Plates & Rangoli',
-  'wall-hangings': '🎈 Wall & Door Hangings',
-  bandhanwar: '🌼 Bandhanwar & Torans',
-  'festive-strings': '🔔 Festive Strings',
-  'chand-strings': '🌙 Chand Strings',
-  mats: '🌸 Mats',
-  'party-hampers': '🎁 Party & Gift Hampers',
+  'wall-hangings': 'Wall & Door Hangings',
+  bandhanwar: 'Bandhanwar & Torans',
+  'festive-strings': 'Festive Strings',
+  'chand-strings': 'Chand Strings',
+  mats: 'Mats',
+  'party-hampers': 'Party & Gift Hampers',
 };
 
 export default function ProductGrid({
@@ -40,13 +41,15 @@ export default function ProductGrid({
   const theme = festival?.theme ?? DEFAULT_THEME;
   const isExclusive = festival?.mode === 'exclusive';
 
-  // Build the filter pills from the categories actually present, so a pill can
-  // never point at an empty category and no category is left unreachable.
-  const categories = [
+  // Build the category tiles from the categories actually present, so a tile
+  // can never point at an empty category and no category is left unreachable.
+  // Each tile shows the first product in its category as its thumbnail.
+  const categories: { id: string; label: string; cover?: Product }[] = [
     { id: 'all', label: festival ? `All ${festival.name} Picks` : 'All Products' },
     ...Array.from(new Set(products.map((p) => p.category))).map((id) => ({
       id,
       label: CATEGORY_LABELS[id] || id.replace(/-/g, ' '),
+      cover: products.find((p) => p.category === id),
     })),
   ];
 
@@ -116,24 +119,55 @@ export default function ProductGrid({
         </div>
       </div>
 
-      {/* Filter Category Pills — swipeable rail on phones, edge-to-edge like the
-          reference. Hidden during an exclusive festival: the whole shelf is the
+      {/* Category tiles — a round thumbnail with the name underneath. On phones
+          the rail swipes edge to edge and the next tile peeks in to show there
+          is more. Hidden during an exclusive festival: the whole shelf is the
           festival collection, so splitting it by category only buries products. */}
       {!isExclusive && (
-      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0 pb-2">
-        {categories.map((cat) => (
-          <button
-            key={cat.id}
-            onClick={() => setSelectedCategory(cat.id)}
-            className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-              selectedCategory === cat.id
-                ? 'bg-stone-900 text-white shadow-md'
-                : 'bg-white text-stone-700 hover:bg-stone-100 border border-stone-200'
-            }`}
-          >
-            {cat.label}
-          </button>
-        ))}
+      <div className="flex items-start gap-3 sm:gap-5 overflow-x-auto scrollbar-none snap-x -mx-3 px-3 sm:mx-0 sm:px-0 pb-1">
+        {categories.map((cat) => {
+          const active = selectedCategory === cat.id;
+          return (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => setSelectedCategory(cat.id)}
+              aria-pressed={active}
+              className="group snap-start shrink-0 w-[4.5rem] sm:w-24 flex flex-col items-center gap-2 text-center"
+            >
+              <span
+                className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-full p-[3px] transition-all ${
+                  active
+                    ? 'bg-gradient-to-br from-[#B8893B] via-[#E6C878] to-[#B8893B] shadow-md'
+                    : 'bg-stone-200/80 group-hover:bg-[#E6C878]/70'
+                }`}
+              >
+                <span className="block w-full h-full rounded-full overflow-hidden bg-[#FAF8F5] ring-2 ring-[#FAF8F5]">
+                  {cat.cover ? (
+                    <ProductMedia
+                      product={cat.cover}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span
+                      className="w-full h-full flex items-center justify-center text-white"
+                      style={{ background: `linear-gradient(135deg, ${theme.accent}, ${theme.accentDark})` }}
+                    >
+                      <Sparkles className="w-6 h-6 sm:w-7 sm:h-7" />
+                    </span>
+                  )}
+                </span>
+              </span>
+              <span
+                className={`text-[11px] sm:text-xs leading-tight line-clamp-2 transition-colors ${
+                  active ? 'text-[#2B1A12] font-bold' : 'text-stone-600 font-medium group-hover:text-stone-900'
+                }`}
+              >
+                {cat.label}
+              </span>
+            </button>
+          );
+        })}
       </div>
       )}
 
