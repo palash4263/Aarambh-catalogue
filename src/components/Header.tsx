@@ -40,7 +40,6 @@ export default function Header({
   const navLinks = [
     { label: 'Catalogue', href: '/' },
     { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -71,7 +70,7 @@ export default function Header({
 
           {/* Left: Brand */}
           <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group min-w-0">
-            <LogoMark variant="outline" className="w-8 h-8 sm:w-9 sm:h-9 group-hover:scale-105" />
+            <LogoMark variant="outline" className="w-8 h-8 sm:w-9 sm:h-9 text-[#7A1730] group-hover:scale-105" />
             <div className="flex flex-col min-w-0">
               <span className="text-lg sm:text-xl lg:text-2xl font-semibold tracking-[0.08em] text-[#2B1A12] font-['Cinzel',serif] leading-none truncate">
                 Aarambh
